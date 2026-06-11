@@ -1,8 +1,8 @@
 # Citas · Frontend
 
 Frontend en **React + TypeScript + Vite** para la API de Citas (.NET).
-Proyecto **independiente** del backend: tiene su propio `package.json` y build.
-Vive dentro del repo solo por comodidad (estilo monorepo `/backend` + `/frontend`).
+Repositorio **independiente** del backend (`Citas.slnx`), con su propio control de versiones.
+Asume que la API vive en `../Citas/Citas`.
 
 ## Requisitos
 
@@ -14,7 +14,7 @@ Vive dentro del repo solo por comodidad (estilo monorepo `/backend` + `/frontend
 1. **Levanta el backend** con el perfil HTTP (importante: evita el redirect a HTTPS):
 
    ```bash
-   cd ../Citas
+   cd ../Citas/Citas
    dotnet run --launch-profile http
    ```
 

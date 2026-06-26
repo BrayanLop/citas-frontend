@@ -87,6 +87,8 @@ h3 { font-size: 1.05rem; font-weight: 700; margin: 0; }
 .field > span { font-size: 0.85rem; font-weight: 600; color: var(--ink-soft); }
 .field > span em { color: var(--muted); font-weight: 400; font-style: normal; }
 .field input, .field select, .field textarea {
+  width: 100%;
+  min-width: 0; /* deja que el input encoja dentro de columnas de grid */
   border: 1.5px solid var(--line);
   border-radius: var(--radius-sm);
   padding: 0.7rem 0.85rem;
@@ -103,6 +105,8 @@ h3 { font-size: 1.05rem; font-weight: 700; margin: 0; }
 .field__hint { font-size: 0.78rem; color: var(--muted); }
 .field__hint.warn { color: var(--warn); }
 .grid-2 { display: grid; grid-template-columns: 1fr 1fr; gap: 0.8rem; }
+/* Sin esto, las columnas no encogen por debajo del ancho mínimo del input y la fila se desborda. */
+.grid-2 > * { min-width: 0; }
 
 /* ---------- Chips & badges ---------- */
 .chip {

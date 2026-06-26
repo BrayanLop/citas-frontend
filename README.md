@@ -15,6 +15,7 @@ Asume que la API vive en `../Citas/Citas`.
 
    ```bash
    cd ../Citas/Citas
+   cp appsettings.Example.json appsettings.json   # solo la 1ª vez: pon tu conexión y la clave JWT
    dotnet run --launch-profile http
    ```
 

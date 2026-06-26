@@ -1,3 +1,5 @@
+// Funciones de la API agrupadas por recurso. Cada una devuelve ya el .data
+// tipado, así las páginas no andan lidiando con la respuesta de axios.
 import { api } from './client'
 import type {
   ClienteAuthResponseDto,

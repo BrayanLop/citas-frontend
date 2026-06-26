@@ -11,7 +11,7 @@ export function formatFecha(iso: string): string {
   return `${d.getDate()} ${meses[d.getMonth()]} ${d.getFullYear()}`
 }
 
-/** "HH:mm:ss" -> "HH:mm" */
+// El backend manda la hora como "HH:mm:ss"; aquí mostramos solo "HH:mm".
 export function formatHora(span?: string | null): string {
   if (!span) return '—'
   return span.slice(0, 5)

@@ -2,9 +2,9 @@ import { useState } from 'react'
 import { Link, useNavigate } from 'react-router-dom'
 import { authApi } from '../api/services'
 import { apiError } from '../api/client'
-import { useAuth } from '../context/AuthContext'
-import { useToast } from '../context/ToastContext'
-import { AuthShell } from './AuthShell'
+import { useAuth } from '../hooks/useAuth'
+import { useToast } from '../hooks/useToast'
+import { AuthShell } from '../components/AuthShell'
 
 export function RegisterPage() {
   const { signInGlobal } = useAuth()

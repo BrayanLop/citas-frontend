@@ -1,5 +1,5 @@
 import { NavLink, Outlet, useNavigate } from 'react-router-dom'
-import { useAuth } from '../context/AuthContext'
+import { useAuth } from '../hooks/useAuth'
 
 const links = [
   { to: '/app/citas', label: 'Mis citas', icon: '📅' },
@@ -7,7 +7,7 @@ const links = [
   { to: '/app/servicios', label: 'Servicios', icon: '✂️' },
 ]
 
-export function Layout() {
+export function AppLayout() {
   const { nombre, empresaNombre, tenant, signOut, leaveEmpresa } = useAuth()
   const navigate = useNavigate()
 

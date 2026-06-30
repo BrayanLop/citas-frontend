@@ -1,8 +1,6 @@
-import { useEffect, useState } from 'react'
-import { serviciosApi } from '../api/services'
-import { apiError } from '../api/client'
+import { useState } from 'react'
 import type { ServicioResponseDto } from '../api/types'
-import { useToast } from '../context/ToastContext'
+import { useServicios } from '../hooks/useServicios'
 import { Spinner, EmptyState } from '../components/Spinner'
 import { Modal } from '../components/Modal'
 import { formatMoneda } from '../lib/format'
@@ -10,23 +8,12 @@ import { formatMoneda } from '../lib/format'
 const vacio = { nombreServicio: '', valor: '', tiempoEstimado: '' }
 
 export function ServiciosPage() {
-  const { notify } = useToast()
-  const [servicios, setServicios] = useState<ServicioResponseDto[]>([])
-  const [loading, setLoading] = useState(true)
+  const { servicios, loading, guardar: guardarServicio, eliminar: eliminarServicio } =
+    useServicios()
   const [modal, setModal] = useState(false)
   const [editId, setEditId] = useState<number | null>(null)
   const [form, setForm] = useState(vacio)
   const [saving, setSaving] = useState(false)
-
-  function cargar() {
-    setLoading(true)
-    serviciosApi
-      .list()
-      .then(setServicios)
-      .catch((err) => notify(apiError(err), 'error'))
-      .finally(() => setLoading(false))
-  }
-  useEffect(cargar, []) // eslint-disable-line react-hooks/exhaustive-deps
 
   function abrirNuevo() {
     setEditId(null)
@@ -47,37 +34,21 @@ export function ServiciosPage() {
   async function guardar(e: React.FormEvent) {
     e.preventDefault()
     setSaving(true)
-    const dto = {
-      nombreServicio: form.nombreServicio,
-      valor: Number(form.valor),
-      tiempoEstimado: Number(form.tiempoEstimado),
-    }
-    try {
-      if (editId == null) {
-        await serviciosApi.create(dto)
-        notify('Servicio creado', 'success')
-      } else {
-        await serviciosApi.update(editId, dto)
-        notify('Servicio actualizado', 'success')
-      }
-      setModal(false)
-      cargar()
-    } catch (err) {
-      notify(apiError(err), 'error')
-    } finally {
-      setSaving(false)
-    }
+    const ok = await guardarServicio(
+      {
+        nombreServicio: form.nombreServicio,
+        valor: Number(form.valor),
+        tiempoEstimado: Number(form.tiempoEstimado),
+      },
+      editId,
+    )
+    if (ok) setModal(false)
+    setSaving(false)
   }
 
   async function eliminar(s: ServicioResponseDto) {
     if (!confirm(`¿Eliminar "${s.nombreServicio}"?`)) return
-    try {
-      await serviciosApi.remove(s.idServicio)
-      notify('Servicio eliminado', 'success')
-      cargar()
-    } catch (err) {
-      notify(apiError(err), 'error')
-    }
+    await eliminarServicio(s)
   }
 
   return (

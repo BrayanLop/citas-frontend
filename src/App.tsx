@@ -1,8 +1,8 @@
 import { BrowserRouter, Navigate, Route, Routes } from 'react-router-dom'
 import { AuthProvider } from './context/AuthContext'
 import { ToastProvider } from './context/ToastContext'
-import { Layout } from './components/Layout'
-import { RequireAuth, RequireEmpresa } from './components/Guards'
+import { AppLayout } from './components/AppLayout'
+import { RequireAuth, RequireEmpresa } from './components/RouteGuards'
 import { LoginPage } from './pages/LoginPage'
 import { RegisterPage } from './pages/RegisterPage'
 import { SelectEmpresaPage } from './pages/SelectEmpresaPage'
@@ -32,7 +32,7 @@ export default function App() {
               path="/app"
               element={
                 <RequireEmpresa>
-                  <Layout />
+                  <AppLayout />
                 </RequireEmpresa>
               }
             >

@@ -1,10 +1,7 @@
-import { useCallback, useEffect, useMemo, useState } from 'react'
+import { useMemo, useState } from 'react'
 import { Link } from 'react-router-dom'
-import { citasApi } from '../api/services'
-import { apiError } from '../api/client'
-import type { CitaResponseDto, EstadoCita } from '../api/types'
-import { useAuth } from '../context/AuthContext'
-import { useToast } from '../context/ToastContext'
+import type { EstadoCita } from '../api/types'
+import { useCitas } from '../hooks/useCitas'
 import { Spinner, EmptyState } from '../components/Spinner'
 import {
   estadoBadge,
@@ -22,46 +19,13 @@ const filtros: Array<{ key: 'Todas' | EstadoCita; label: string }> = [
 ]
 
 export function CitasPage() {
-  const { userId } = useAuth()
-  const { notify } = useToast()
-  const [citas, setCitas] = useState<CitaResponseDto[]>([])
-  const [loading, setLoading] = useState(true)
+  const { citas, loading, busy, cambiarEstado } = useCitas()
   const [filtro, setFiltro] = useState<'Todas' | EstadoCita>('Todas')
-  const [busy, setBusy] = useState<number | null>(null)
-
-  const cargar = useCallback(() => {
-    if (userId == null) return
-    setLoading(true)
-    citasApi
-      .list({ clienteId: userId })
-      .then((data) =>
-        setCitas(
-          [...data].sort((a, b) => b.fechaCita.localeCompare(a.fechaCita)),
-        ),
-      )
-      .catch((err) => notify(apiError(err), 'error'))
-      .finally(() => setLoading(false))
-  }, [userId, notify])
-
-  useEffect(cargar, [cargar])
 
   const visibles = useMemo(
     () => (filtro === 'Todas' ? citas : citas.filter((c) => c.estado === filtro)),
     [citas, filtro],
   )
-
-  async function cambiarEstado(c: CitaResponseDto, estado: EstadoCita) {
-    setBusy(c.idCita)
-    try {
-      await citasApi.cambiarEstado(c.idCita, estado)
-      notify(`Cita marcada como ${estado.toLowerCase()}`, 'success')
-      cargar()
-    } catch (err) {
-      notify(apiError(err), 'error')
-    } finally {
-      setBusy(null)
-    }
-  }
 
   const resumen = useMemo(() => {
     const prox = citas.filter(

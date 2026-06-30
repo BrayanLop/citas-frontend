@@ -1,11 +1,4 @@
-import {
-  createContext,
-  useContext,
-  useEffect,
-  useMemo,
-  useState,
-  type ReactNode,
-} from 'react'
+import { createContext, useEffect, useMemo, useState, type ReactNode } from 'react'
 import { setAuthToken } from '../api/client'
 
 interface SessionState {
@@ -18,7 +11,7 @@ interface SessionState {
   userId: number | null // Id del usuario cliente dentro del tenant
 }
 
-interface AuthContextValue extends SessionState {
+export interface AuthContextValue extends SessionState {
   isAuthenticated: boolean
   hasEmpresa: boolean
   signInGlobal: (data: { token: string; personaId: number; nombre: string }) => void
@@ -42,7 +35,9 @@ const empty: SessionState = {
   userId: null,
 }
 
-const AuthContext = createContext<AuthContextValue | null>(null)
+// El contexto se consume con el hook useAuth (ver src/hooks/useAuth.ts).
+// eslint-disable-next-line react-refresh/only-export-components
+export const AuthContext = createContext<AuthContextValue | null>(null)
 
 function loadSession(): SessionState {
   try {
@@ -85,11 +80,4 @@ export function AuthProvider({ children }: { children: ReactNode }) {
   )
 
   return <AuthContext.Provider value={value}>{children}</AuthContext.Provider>
-}
-
-// eslint-disable-next-line react-refresh/only-export-components
-export function useAuth(): AuthContextValue {
-  const ctx = useContext(AuthContext)
-  if (!ctx) throw new Error('useAuth debe usarse dentro de <AuthProvider>')
-  return ctx
 }

@@ -1,17 +1,19 @@
-import { createContext, useCallback, useContext, useState, type ReactNode } from 'react'
+import { createContext, useCallback, useState, type ReactNode } from 'react'
 
-type ToastKind = 'success' | 'error' | 'info'
+export type ToastKind = 'success' | 'error' | 'info'
 interface Toast {
   id: number
   kind: ToastKind
   message: string
 }
 
-interface ToastContextValue {
+export interface ToastContextValue {
   notify: (message: string, kind?: ToastKind) => void
 }
 
-const ToastContext = createContext<ToastContextValue | null>(null)
+// El contexto se consume con el hook useToast (ver src/hooks/useToast.ts).
+// eslint-disable-next-line react-refresh/only-export-components
+export const ToastContext = createContext<ToastContextValue | null>(null)
 let seq = 1
 
 export function ToastProvider({ children }: { children: ReactNode }) {
@@ -36,11 +38,4 @@ export function ToastProvider({ children }: { children: ReactNode }) {
       </div>
     </ToastContext.Provider>
   )
-}
-
-// eslint-disable-next-line react-refresh/only-export-components
-export function useToast(): ToastContextValue {
-  const ctx = useContext(ToastContext)
-  if (!ctx) throw new Error('useToast debe usarse dentro de <ToastProvider>')
-  return ctx
 }

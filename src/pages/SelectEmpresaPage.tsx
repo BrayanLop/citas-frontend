@@ -3,8 +3,8 @@ import { useNavigate } from 'react-router-dom'
 import { authApi, empresasApi } from '../api/services'
 import { apiError } from '../api/client'
 import type { EmpresaResponseDto } from '../api/types'
-import { useAuth } from '../context/AuthContext'
-import { useToast } from '../context/ToastContext'
+import { useAuth } from '../hooks/useAuth'
+import { useToast } from '../hooks/useToast'
 import { Spinner, EmptyState } from '../components/Spinner'
 
 export function SelectEmpresaPage() {
